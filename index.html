@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decred Node Installation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: linear-gradient(135deg, #1a1a1a 0%, #272822 50%, #1a1a1a 100%) fixed;
+            color: #F8F8F2;
+            min-height: 100vh;
+            padding: 100px 0 150px;
+            margin: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 217, 239, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(166, 226, 46, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(249, 38, 114, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(39, 40, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #49483E;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.5s ease-out;
+            will-change: transform;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #66D9EF 0%, #A6E22E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #75715E;
+            opacity: 1;
+            font-weight: 400;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(39, 40, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #49483E;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .footer-link {
+            color: #A6E22E;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #66D9EF, #A6E22E);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #66D9EF;
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(102, 217, 239, 0.5);
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        .footer-text {
+            color: #75715E;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .footer-text a {
+            color: #AE81FF;
+            text-decoration: none;
+        }
+
+        .footer-text a:hover {
+            color: #F92672;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #49483E;
+        }
+
+        .tab {
+            background: transparent;
+            color: #A6E22E;
+            border: none;
+            padding: 15px 30px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab:hover {
+            color: #66D9EF;
+            background: rgba(102, 217, 239, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            color: #F92672;
+            border-bottom-color: #F92672;
+            text-shadow: 0 0 10px rgba(249, 38, 114, 0.5);
+        }
+
+        .main-content {
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .installation-section {
+            background: linear-gradient(135deg, #3E3D32 0%, #35342A 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #49483E;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Show all tabs when JavaScript is disabled */
+        body.no-js .tab-content {
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        body.no-js .tabs {
+            display: none;
+        }
+
+        body.no-js .demo-section {
+            display: block !important;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #F92672;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: "▶";
+            color: #A6E22E;
+        }
+
+        .command-box {
+            background: #1E1F1C;
+            border: 2px solid #49483E;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .command-box:hover {
+            border-color: #66D9EF;
+            box-shadow: 0 0 20px rgba(102, 217, 239, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .command-box::before {
+            content: "$ ";
+            color: #A6E22E;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .command {
+            color: #F8F8F2;
+            font-size: 1.3rem;
+            display: inline;
+            user-select: all;
+        }
+
+        .code-block {
+            background: #1E1F1C;
+            border: 2px solid #49483E;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: #F8F8F2;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+            white-space: pre;
+            user-select: all;
+        }
+
+        .code-block .keyword {
+            color: #F92672;
+        }
+
+        .code-block .string {
+            color: #E6DB74;
+        }
+
+        .code-block .comment {
+            color: #75715E;
+        }
+
+        .code-block .property {
+            color: #A6E22E;
+        }
+
+        .code-block .value {
+            color: #AE81FF;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #F92672 0%, #AE81FF 100%);
+            color: #F8F8F2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(249, 38, 114, 0.3);
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #FF3D8A 0%, #C792EA 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 38, 114, 0.5);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(249, 38, 114, 0.4);
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #3E3D32 0%, #35342A 100%);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #49483E;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .demo-image {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #49483E;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-image:hover {
+            border-color: #66D9EF;
+            box-shadow: 0 0 30px rgba(102, 217, 239, 0.3);
+            transform: scale(1.01);
+        }
+
+        .info-text {
+            color: #E6DB74;
+            line-height: 1.8;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #AE81FF;
+            font-weight: bold;
+        }
+
+        .download-link {
+            display: inline-block;
+            color: #66D9EF;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1E1F1C 0%, #2A2B26 100%);
+            border: 2px solid #66D9EF;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 217, 239, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .download-link:hover::before {
+            left: 100%;
+        }
+
+        .download-link:hover {
+            background: linear-gradient(135deg, #66D9EF 0%, #A6E22E 100%);
+            color: #272822;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 217, 239, 0.5);
+            border-color: #A6E22E;
+        }
+
+        .download-link:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+                padding-bottom: 220px;
+            }
+
+            .header {
+                padding: 15px 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .footer {
+                padding: 15px 10px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .footer-link {
+                font-size: 0.9rem;
+            }
+
+            .installation-section,
+            .demo-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .command-box {
+                padding: 15px 20px;
+            }
+
+            .command {
+                font-size: 0.9rem;
+            }
+
+            .copy-btn {
+                position: static;
+                margin-top: 15px;
+                width: 100%;
+            }
+
+            .code-block {
+                padding: 15px 20px;
+            }
+
+            .code-block pre {
+                font-size: 0.85rem;
+            }
+
+            .code-block .copy-btn {
+                position: absolute;
+                width: auto;
+                margin-top: 0;
+            }
+
+            .info-text {
+                font-size: 0.9rem;
+            }
+
+            .download-link {
+                font-size: 1rem;
+                padding: 10px 20px;
+                display: block;
+                text-align: center;
+            }
+
+            .tab {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 130px;
+                padding-bottom: 240px;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .installation-section,
+            .demo-section {
+                padding: 15px;
+            }
+
+            .command {
+                font-size: 0.8rem;
+            }
+
+            .code-block pre {
+                font-size: 0.75rem;
+            }
+
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        .copied-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #A6E22E 0%, #66D9EF 100%);
+            color: #272822;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-20px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(166, 226, 46, 0.4);
+        }
+
+        .copied-notification.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+<body class="no-js">
+    <noscript>
+        <style>
+            .copy-btn {
+                display: none;
+            }
+            .tab-content {
+                display: block !important;
+                margin-bottom: 30px;
+            }
+            .tabs {
+                display: none;
+            }
+            .demo-section {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <div class="copied-notification" id="notification">Copied to clipboard!</div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <img src="dcr.svg" alt="Decred Logo" class="logo">
+                <div class="header-text">
+                    <h1>Decred Node</h1>
+                    <p class="subtitle">Money Evolved</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+        <div class="installation-section">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('curl', this)">Quick Install</button>
+                <button class="tab" onclick="switchTab('docker', this)">Docker Compose</button>
+            </div>
+
+            <div id="curl-content" class="tab-content active">
+                <h2 class="section-title">Installation Command</h2>
+                <p class="info-text">
+                    Run this single command to install and configure your Decred node:
+                </p>
+                <div class="command-box">
+                    <span class="command" id="installCommand">curl -fsSL https://node.dcr.pw | sudo bash</span>
+                    <button class="copy-btn" onclick="copyCommand()">Copy</button>
+                </div>
+                <p class="info-text">
+                    This command will download and execute the installation script, 
+                    setting up a <span class="highlight">full Decred node</span> on your system.
+                </p>
+            </div>
+
+            <div id="docker-content" class="tab-content">
+                <h2 class="section-title">Docker Compose Setup</h2>
+                <p class="info-text">
+                    Download or copy the <span class="highlight">dcr-docker-compose.yaml</span> file:
+                </p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyDockerCompose()">Copy</button>
+                    <pre id="dockerCompose"><span class="keyword">services:</span>
+  <span class="property">dcr:</span>
+    <span class="keyword">image:</span> <span class="string">decred/dcrd-mainnet:latest</span>
+    <span class="keyword">container_name:</span> <span class="string">dcr</span>
+    <span class="keyword">restart:</span> <span class="string">unless-stopped</span>
+    <span class="keyword">user:</span> <span class="string">'0:0'</span>
+    <span class="keyword">ports:</span>
+      - <span class="string">'9108:9108'</span>  <span class="comment"># P2P port</span>
+      - <span class="string">'9109:9109'</span>  <span class="comment"># RPC port</span>
+    <span class="keyword">volumes:</span>
+      - <span class="string">dcr:/home/decred/.dcrd</span>
+
+<span class="keyword">volumes:</span>
+  <span class="property">dcr:</span>
+</pre>
+                </div>
+                <p class="info-text">
+                    <a href="dcr-docker-compose.yaml" download="dcr-docker-compose.yaml" class="download-link">⬇ Download dcr-docker-compose.yaml</a>
+                </p>
+                <p class="info-text" style="margin-top: 15px;">
+                    Then run: <span class="highlight">docker compose up -d</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="demo-section" id="demo-section">
+            <h2 class="section-title">Demo</h2>
+            <p class="info-text">
+                See the installation process in action:
+            </p>
+            <object data="dcr-demo.svg" type="image/svg+xml" class="demo-image" id="demoSvg">
+                <img src="dcr-demo.svg" alt="Decred Installation Demo" class="demo-image">
+            </object>
+        </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span>🌐</span> Official Website
+                </a>
+                <a href="https://docs.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span>📚</span> Documentation
+                </a>
+                <a href="https://github.com/decred" target="_blank" rel="noopener" class="footer-link">
+                    <span>💻</span> GitHub
+                </a>
+                <a href="https://dcrdata.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span>📊</span> Block Explorer
+                </a>
+                <a href="https://chat.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span>💬</span> Community
+                </a>
+            </div>
+            <p class="footer-text">
+                Powered by <a href="https://decred.org" target="_blank" rel="noopener">Decred</a>
+            </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Remove no-js class when JavaScript is enabled
+        document.body.classList.remove('no-js');
+
+        function copyToClipboard(text) {
+            // Try modern clipboard API first
+            if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(showNotification)
+                    .catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function copyCommand() {
+            copyToClipboard(document.getElementById('installCommand').textContent);
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showNotification();
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Copy failed. Please copy manually: ' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        const showNotification = (() => {
+            let timeoutId;
+            const notification = document.getElementById('notification');
+            
+            return () => {
+                clearTimeout(timeoutId);
+                notification.classList.add('show');
+                timeoutId = setTimeout(() => notification.classList.remove('show'), 2000);
+            };
+        })();
+
+        function copyDockerCompose() {
+            copyToClipboard(document.getElementById('dockerCompose').textContent);
+        }
+
+        function switchTab(tabName, clickedTab) {
+            // Use more efficient class toggling
+            document.querySelectorAll('.tab-content').forEach(content => 
+                content.classList.toggle('active', content.id === `${tabName}-content`)
+            );
+            
+            document.querySelectorAll('.tab').forEach(tab => 
+                tab.classList.toggle('active', tab === clickedTab)
+            );
+            
+            // Show/hide demo section
+            const demoSection = document.getElementById('demo-section');
+            demoSection.style.display = tabName === 'curl' ? 'block' : 'none';
+        }
+
+        // Event delegation for command box click
+        document.querySelector('.command-box')?.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('copy-btn')) {
+                copyCommand();
+            }
+        });
+
+        // Auto-play the SVG demo when it loads
+        const demoSvg = document.getElementById('demoSvg');
+        demoSvg?.addEventListener('load', () => {
+            try {
+                const svgDoc = demoSvg.contentDocument;
+                const pauseButton = svgDoc?.getElementById('pause-button');
+                const playButton = svgDoc?.getElementById('play-button');
+                
+                // Start playing if not already playing
+                if (playButton && (!pauseButton || pauseButton.getAttribute('display') === 'none')) {
+                    playButton.click();
+                }
+            } catch (e) {
+                console.log('SVG autoplay not available:', e);
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
