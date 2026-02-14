@@ -1,0 +1,14 @@
+services:
+  dcr:
+    image: decred/dcrd-mainnet:latest
+    container_name: dcr
+    restart: unless-stopped
+    user: '0:0'
+    ports:
+      - '9108:9108'  # P2P port
+      - '9109:9109'  # RPC port
+    volumes:
+      - dcr:/home/decred/.dcrd
+
+volumes:
+  dcr:
