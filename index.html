@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Swap the no-js class before paint so the JS layout never flashes -->
+    <script>document.documentElement.classList.remove('no-js');</script>
     <title data-i18n="title">Decred Node Installation</title>
 
     <!-- SEO & Social Meta Tags -->
     <meta name="description" content="Easy one-command installation guide for setting up a full Decred node on Linux.">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#1a1a1a">
     <link rel="canonical" href="https://node.dcr.pw/">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="dcr.svg">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -18,6 +23,7 @@
     <meta property="og:description"
         content="Easy one-command installation guide for setting up a full Decred node on Linux.">
     <meta property="og:image" content="https://node.dcr.pw/dcr.svg">
+    <meta property="og:image:alt" content="Decred logo">
     <!-- Using logo as placeholder, ideally a larger social card -->
 
     <!-- Twitter -->
@@ -27,38 +33,36 @@
     <meta property="twitter:description"
         content="Easy one-command installation guide for setting up a full Decred node on Linux.">
     <meta property="twitter:image" content="https://node.dcr.pw/dcr.svg">
+    <meta property="twitter:image:alt" content="Decred logo">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Decred Node (dcrd)",
+        "operatingSystem": "Linux",
+        "applicationCategory": "FinanceApplication",
+        "description": "Easy one-command installation for setting up a full Decred node on Linux.",
+        "url": "https://node.dcr.pw/",
+        "image": "https://node.dcr.pw/dcr.svg",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "Decred", "url": "https://decred.org" }
+    }
+    </script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="no-js">
-    <noscript>
-        <style>
-            .copy-btn {
-                display: none;
-            }
-
-            .tab-content {
-                display: block !important;
-                margin-bottom: 30px;
-            }
-
-            .tabs {
-                display: none;
-            }
-
-            .demo-section {
-                display: block !important;
-            }
-        </style>
-    </noscript>
-    <div class="copied-notification" id="notification" data-i18n="copied">Copied to clipboard!</div>
+<body>
+    <div class="copied-notification" id="notification" role="status" aria-live="polite" data-i18n="copied">Copied to
+        clipboard!</div>
 
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <img src="dcr.svg" alt="Decred Logo" class="logo">
+                <img src="dcr.svg" alt="Decred Logo" class="logo" width="60" height="60" decoding="async">
                 <div class="header-text">
                     <h1 data-i18n="heading">Decred Node</h1>
                     <p class="subtitle" data-i18n="subtitle">Money Evolved</p>
@@ -81,10 +85,10 @@
             <div class="installation-section">
                 <div class="tabs" role="tablist">
                     <button class="tab active" onclick="switchTab('curl', this)" data-i18n="tab_quick" role="tab"
-                        aria-selected="true" aria-controls="curl-content" id="tab-curl">Quick
+                        aria-selected="true" aria-controls="curl-content" id="tab-curl" tabindex="0">Quick
                         Install</button>
                     <button class="tab" onclick="switchTab('docker', this)" data-i18n="tab_docker" role="tab"
-                        aria-selected="false" aria-controls="docker-content" id="tab-docker">Docker
+                        aria-selected="false" aria-controls="docker-content" id="tab-docker" tabindex="-1">Docker
                         Compose</button>
                 </div>
 
@@ -116,19 +120,22 @@
                         <button class="copy-btn" onclick="copyDockerCompose()" data-i18n="copy_btn"
                             aria-label="Copy Docker Compose content">Copy</button>
                         <pre id="dockerCompose"><span class="keyword">services:</span>
-  <span class="property">dcr:</span>
-    <span class="keyword">image:</span> <span class="string">decred/dcrd-mainnet:latest</span>
-    <span class="keyword">container_name:</span> <span class="string">dcr</span>
+  <span class="property">dcrd:</span>
+    <span class="keyword">image:</span> <span class="string">ghcr.io/jzbz/dcrd-mainnet:latest</span>
+    <span class="keyword">container_name:</span> <span class="string">dcrd</span>
     <span class="keyword">restart:</span> <span class="string">unless-stopped</span>
-    <span class="keyword">user:</span> <span class="string">'0:0'</span>
+    <span class="keyword">read_only:</span> <span class="string">true</span>
+    <span class="keyword">stop_grace_period:</span> <span class="string">60s</span>
+    <span class="comment"># Add the service name to the RPC TLS certificate for remote RPC clients.</span>
+    <span class="keyword">command:</span> [<span class="string">"--altdnsnames"</span>, <span class="string">"dcrd"</span>]
     <span class="keyword">ports:</span>
-      - <span class="string">'9108:9108'</span>  <span class="comment"># P2P port</span>
-      - <span class="string">'9109:9109'</span>  <span class="comment"># RPC port</span>
+      - <span class="string">"9108:9108"</span>   <span class="comment"># mainnet peer-to-peer</span>
+      <span class="comment"># - "9109:9109" # mainnet JSON-RPC (uncomment to expose remotely)</span>
     <span class="keyword">volumes:</span>
-      - <span class="string">dcr:/home/decred/.dcrd</span>
+      - <span class="string">decred-data:/home/decred</span>
 
 <span class="keyword">volumes:</span>
-  <span class="property">dcr:</span>
+  <span class="property">decred-data:</span>
 </pre>
                     </div>
                     <p class="info-text">
@@ -181,8 +188,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="translations.js"></script>
-    <script src="script.js"></script>
+    <script src="translations.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>

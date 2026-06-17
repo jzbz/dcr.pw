@@ -1,5 +1,5 @@
-// Remove no-js class when JavaScript is enabled
-document.body.classList.remove('no-js');
+// The `no-js` class is removed in an inline <head> script before first paint,
+// so the JS layout is shown immediately without a flash.
 
 function copyToClipboard(text) {
     // Try modern clipboard API first
@@ -76,6 +76,7 @@ function initLanguage() {
     supportedLangs.forEach(lang => {
         const opt = document.createElement('div');
         opt.className = 'lang-option';
+        opt.dataset.lang = lang;
         opt.setAttribute('role', 'option'); // Accessibility
         opt.setAttribute('tabindex', '0'); // Accessibility
         opt.onclick = () => {
@@ -128,13 +129,9 @@ function setLanguage(lang) {
 
     // Update active state in menu
     document.querySelectorAll('.lang-option').forEach(opt => {
-        if (opt.textContent.includes(lang.toUpperCase())) {
-            opt.classList.add('active');
-            opt.setAttribute('aria-selected', 'true');
-        } else {
-            opt.classList.remove('active');
-            opt.setAttribute('aria-selected', 'false');
-        }
+        const isActive = opt.dataset.lang === lang;
+        opt.classList.toggle('active', isActive);
+        opt.setAttribute('aria-selected', isActive);
     });
 
     // Update html lang attribute
@@ -149,7 +146,10 @@ function toggleLangMenu() {
 }
 
 // Initialize on load
-document.addEventListener('DOMContentLoaded', initLanguage);
+document.addEventListener('DOMContentLoaded', () => {
+    initLanguage();
+    initTabs();
+});
 
 function switchTab(tabName, clickedTab) {
     // Use more efficient class toggling
@@ -157,13 +157,43 @@ function switchTab(tabName, clickedTab) {
         content.classList.toggle('active', content.id === `${tabName}-content`)
     );
 
-    document.querySelectorAll('.tab').forEach(tab =>
-        tab.classList.toggle('active', tab === clickedTab)
-    );
+    document.querySelectorAll('.tab').forEach(tab => {
+        const isActive = tab === clickedTab;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive); // Keep screen readers in sync
+        tab.tabIndex = isActive ? 0 : -1;            // Roving tabindex
+    });
 
     // Show/hide demo section
     const demoSection = document.getElementById('demo-section');
     demoSection.style.display = tabName === 'curl' ? 'block' : 'none';
+}
+
+// Arrow-key navigation for the tablist (WAI-ARIA tabs pattern)
+function initTabs() {
+    const tablist = document.querySelector('[role="tablist"]');
+    if (!tablist) return;
+
+    const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+    tablist.addEventListener('keydown', (e) => {
+        const current = tabs.indexOf(document.activeElement);
+        if (current < 0) return;
+
+        let next;
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown': next = (current + 1) % tabs.length; break;
+            case 'ArrowLeft':
+            case 'ArrowUp': next = (current - 1 + tabs.length) % tabs.length; break;
+            case 'Home': next = 0; break;
+            case 'End': next = tabs.length - 1; break;
+            default: return;
+        }
+
+        e.preventDefault();
+        tabs[next].focus();
+        tabs[next].click();
+    });
 }
 
 // Event delegation for command box click

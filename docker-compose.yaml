@@ -1,14 +1,17 @@
 services:
-  dcr:
-    image: decred/dcrd-mainnet:latest
-    container_name: dcr
+  dcrd:
+    image: ghcr.io/jzbz/dcrd-mainnet:latest
+    container_name: dcrd
     restart: unless-stopped
-    user: '0:0'
+    read_only: true
+    stop_grace_period: 60s
+    # Add the service name to the RPC TLS certificate for remote RPC clients.
+    command: ["--altdnsnames", "dcrd"]
     ports:
-      - '9108:9108'  # P2P port
-      - '9109:9109'  # RPC port
+      - "9108:9108"   # mainnet peer-to-peer
+      # - "9109:9109" # mainnet JSON-RPC (uncomment to expose remotely)
     volumes:
-      - dcr:/home/decred/.dcrd
+      - decred-data:/home/decred
 
 volumes:
-  dcr:
+  decred-data:
