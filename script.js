@@ -163,6 +163,11 @@ function switchTab(tabName, clickedTab) {
         tab.setAttribute('aria-selected', isActive); // Keep screen readers in sync
         tab.tabIndex = isActive ? 0 : -1;            // Roving tabindex
     });
+
+    // The demo illustrates the one-command (curl) flow, so it only
+    // belongs on the Quick Install tab.
+    const demoSection = document.getElementById('demo-section');
+    if (demoSection) demoSection.style.display = tabName === 'curl' ? 'block' : 'none';
 }
 
 // Arrow-key navigation for the tablist (WAI-ARIA tabs pattern)
