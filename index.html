@@ -11,7 +11,7 @@
     <!-- SEO & Social Meta Tags -->
     <meta name="description" content="Easy one-command installation guide for setting up a full Decred node on Linux.">
     <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#1a1a1a">
+    <meta name="theme-color" content="#131310">
     <link rel="canonical" href="https://node.dcr.pw/">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/svg+xml" href="dcr.svg">
@@ -22,18 +22,22 @@
     <meta property="og:title" content="Decred Node Installation">
     <meta property="og:description"
         content="Easy one-command installation guide for setting up a full Decred node on Linux.">
-    <meta property="og:image" content="https://node.dcr.pw/dcr.svg">
-    <meta property="og:image:alt" content="Decred logo">
-    <!-- Using logo as placeholder, ideally a larger social card -->
+    <meta property="og:image" content="https://node.dcr.pw/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt"
+        content="Decred Node — install a full Decred node on Linux with one command: curl -fsSL https://node.dcr.pw | sudo bash">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary">
+    <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://node.dcr.pw/">
     <meta property="twitter:title" content="Decred Node Installation">
     <meta property="twitter:description"
         content="Easy one-command installation guide for setting up a full Decred node on Linux.">
-    <meta property="twitter:image" content="https://node.dcr.pw/dcr.svg">
-    <meta property="twitter:image:alt" content="Decred logo">
+    <meta property="twitter:image" content="https://node.dcr.pw/og-image.png">
+    <meta property="twitter:image:alt"
+        content="Decred Node — install a full Decred node on Linux with one command">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -51,139 +55,208 @@
     }
     </script>
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="copied-notification" id="notification" role="status" aria-live="polite" data-i18n="copied">Copied to
-        clipboard!</div>
+    <!-- Drifting glow blobs behind the frosted glass -->
+    <div class="bg-blobs" aria-hidden="true">
+        <span class="blob blob-teal"></span>
+        <span class="blob blob-pink"></span>
+        <span class="blob blob-cyan"></span>
+    </div>
+
+    <div class="toast" id="notification" role="status" aria-live="polite">
+        <span class="toast-check" aria-hidden="true">✓</span>
+        <span data-i18n="copied">Copied to clipboard!</span>
+    </div>
 
     <div class="container">
         <header class="header">
-            <div class="header-content">
-                <img src="dcr.svg" alt="Decred Logo" class="logo" width="60" height="60" decoding="async">
-                <div class="header-text">
-                    <h1 data-i18n="heading">Decred Node</h1>
-                    <p class="subtitle" data-i18n="subtitle">Money Evolved</p>
+            <div class="brand">
+                <div class="logo-tile">
+                    <img src="dcr.svg" alt="Decred Logo" class="logo" width="34" height="34" decoding="async">
                 </div>
-                <div class="lang-selector">
-                    <button class="lang-btn" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false"
-                        aria-label="Select Language">
-                        <span id="currentLangIcon" aria-hidden="true">🇺🇸</span>
-                        <span id="currentLangCode">EN</span>
-                        <span style="font-size: 0.8em" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language options">
-                        <!-- Options injected by JS -->
-                    </div>
+                <div class="brand-text">
+                    <h1 data-i18n="heading">Decred Node</h1>
+                    <p class="eyebrow" data-i18n="subtitle">Money Evolved</p>
+                </div>
+            </div>
+            <div class="lang-selector">
+                <button class="lang-btn" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false"
+                    aria-label="Select Language">
+                    <span id="currentLangIcon" aria-hidden="true">🇺🇸</span>
+                    <span id="currentLangCode">EN</span>
+                    <span class="caret" aria-hidden="true">▾</span>
+                </button>
+                <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language options">
+                    <!-- Options injected by JS -->
                 </div>
             </div>
         </header>
 
         <main class="main-content">
-            <div class="installation-section">
-                <div class="tabs" role="tablist">
-                    <button class="tab active" onclick="switchTab('curl', this)" data-i18n="tab_quick" role="tab"
-                        aria-selected="true" aria-controls="curl-content" id="tab-curl" tabindex="0">Quick
-                        Install</button>
-                    <button class="tab" onclick="switchTab('docker', this)" data-i18n="tab_docker" role="tab"
-                        aria-selected="false" aria-controls="docker-content" id="tab-docker" tabindex="-1">Docker
-                        Compose</button>
-                </div>
-
-                <div id="curl-content" class="tab-content active" role="tabpanel" aria-labelledby="tab-curl">
-                    <h2 class="section-title" data-i18n="install_cmd_title">Installation Command</h2>
-                    <p class="info-text" data-i18n="install_cmd_info">
-                        Run this single command to install and configure your Decred node:
-                    </p>
-                    <div class="command-box">
-                        <span class="command" id="installCommand">curl -fsSL https://node.dcr.pw | sudo bash</span>
-                        <span class="linux-badge" data-i18n="linux_badge">Linux</span>
-                        <button class="copy-btn" onclick="copyCommand()" data-i18n="copy_btn"
-                            aria-label="Copy installation command">Copy</button>
-                    </div>
-                    <p class="info-text">
-                        <span data-i18n="install_cmd_desc_1">This command will download and execute the installation
-                            script, setting up a</span> <span class="highlight" data-i18n="install_cmd_desc_2">full
-                            Decred node</span> <span data-i18n="install_cmd_desc_3">on your system.</span>
-                    </p>
-                </div>
-
-                <div id="docker-content" class="tab-content" role="tabpanel" aria-labelledby="tab-docker">
-                    <h2 class="section-title" data-i18n="docker_title">Docker Compose Setup</h2>
-                    <p class="info-text">
-                        <span data-i18n="docker_info_1">Download or copy the</span> <span
-                            class="highlight">docker-compose.yaml</span> <span data-i18n="docker_info_2">file:</span>
-                    </p>
-                    <div class="code-block">
-                        <button class="copy-btn" onclick="copyDockerCompose()" data-i18n="copy_btn"
-                            aria-label="Copy Docker Compose content">Copy</button>
-                        <pre id="dockerCompose"><span class="keyword">services:</span>
-  <span class="property">dcrd:</span>
-    <span class="keyword">image:</span> <span class="string">ghcr.io/jzbz/dcrd-mainnet:latest</span>
-    <span class="keyword">container_name:</span> <span class="string">dcrd</span>
-    <span class="keyword">restart:</span> <span class="string">unless-stopped</span>
-    <span class="keyword">read_only:</span> <span class="string">true</span>
-    <span class="keyword">stop_grace_period:</span> <span class="string">60s</span>
-    <span class="comment"># Add the service name to the RPC TLS certificate for remote RPC clients.</span>
-    <span class="keyword">command:</span> [<span class="string">"--altdnsnames"</span>, <span class="string">"dcrd"</span>]
-    <span class="keyword">ports:</span>
-      - <span class="string">"9108:9108"</span>   <span class="comment"># mainnet peer-to-peer</span>
-      <span class="comment"># - "9109:9109" # mainnet JSON-RPC (uncomment to expose remotely)</span>
-    <span class="keyword">volumes:</span>
-      - <span class="string">decred-data:/home/decred</span>
-
-<span class="keyword">volumes:</span>
-  <span class="property">decred-data:</span>
-</pre>
-                    </div>
-                    <p class="info-text">
-                        <a href="docker-compose.yaml" download="docker-compose.yaml" class="download-link"
-                            data-i18n="download_yaml">⬇ Download docker-compose.yaml</a>
-                    </p>
-                    <p class="info-text" style="margin-top: 15px;">
-                        <span data-i18n="then_run">Then run:</span> <span class="highlight">docker compose up -d</span>
-                    </p>
-                </div>
+            <div class="tabs" role="tablist">
+                <button class="tab active" onclick="switchTab('curl', this)" role="tab" aria-selected="true"
+                    aria-controls="curl-content" id="tab-curl" tabindex="0">
+                    <span class="tab-icon" aria-hidden="true">⚡</span>
+                    <span data-i18n="tab_quick">Quick Install</span>
+                </button>
+                <button class="tab" onclick="switchTab('docker', this)" role="tab" aria-selected="false"
+                    aria-controls="docker-content" id="tab-docker" tabindex="-1">
+                    <span class="tab-icon" aria-hidden="true">🐳</span>
+                    <span data-i18n="tab_docker">Docker Compose</span>
+                </button>
             </div>
 
-            <div class="demo-section" id="demo-section">
-                <h2 class="section-title" data-i18n="demo_title">Demo</h2>
-                <p class="info-text" data-i18n="demo_info">
+            <section id="curl-content" class="tab-content active" role="tabpanel" aria-labelledby="tab-curl">
+                <div class="section-head">
+                    <span class="section-num" aria-hidden="true">01</span>
+                    <h2 class="section-title" data-i18n="install_cmd_title">Installation Command</h2>
+                </div>
+                <p class="lead" data-i18n="install_cmd_info">
+                    Run this single command to install and configure your Decred node:
+                </p>
+
+                <div class="code-card" id="installCard">
+                    <div class="code-chrome">
+                        <div class="chrome-dots">
+                            <span class="dot dot-pink"></span>
+                            <span class="dot dot-orange"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="chrome-label">— bash · <span data-i18n="linux_badge">Linux</span></span>
+                        </div>
+                        <button class="copy-btn" onclick="copyCommand()" aria-label="Copy installation command">
+                            <span class="copy-ico" aria-hidden="true">⧉</span>
+                            <span data-i18n="copy_btn">Copy</span>
+                        </button>
+                    </div>
+                    <div class="code-body terminal">
+                        <span class="prompt" aria-hidden="true">$ </span><span class="command"
+                            id="installCommand"><span class="mk-green">curl</span> <span
+                                class="mk-orange">-fsSL</span> <span class="mk-cyan">https://node.dcr.pw</span> <span
+                                class="mk-fg">|</span> <span class="mk-pink">sudo</span> <span
+                                class="mk-green">bash</span></span><span class="cursor" aria-hidden="true"></span>
+                    </div>
+                </div>
+
+                <p class="note">
+                    <span data-i18n="install_cmd_desc_1">This command will download and execute the installation
+                        script, setting up a</span> <span class="highlight" data-i18n="install_cmd_desc_2">full
+                        Decred node</span> <span data-i18n="install_cmd_desc_3">on your system.</span>
+                </p>
+            </section>
+
+            <section id="docker-content" class="tab-content" role="tabpanel" aria-labelledby="tab-docker">
+                <div class="section-head">
+                    <span class="section-num" aria-hidden="true">02</span>
+                    <h2 class="section-title" data-i18n="docker_title">Docker Compose Setup</h2>
+                </div>
+                <p class="lead">
+                    <span data-i18n="docker_info_1">Download or copy the</span> <span
+                        class="mono mk-yellow">docker-compose.yaml</span> <span
+                        data-i18n="docker_info_2">file:</span>
+                </p>
+
+                <div class="code-card">
+                    <div class="code-chrome">
+                        <div class="chrome-dots">
+                            <span class="dot dot-pink"></span>
+                            <span class="dot dot-orange"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="chrome-label">docker-compose.yaml</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyDockerCompose()"
+                            aria-label="Copy Docker Compose content">
+                            <span class="copy-ico" aria-hidden="true">⧉</span>
+                            <span data-i18n="copy_btn">Copy</span>
+                        </button>
+                    </div>
+                    <pre class="code-body" id="dockerCompose"><span class="mk-pink">services</span><span class="mk-fg">:</span>
+  <span class="mk-green">dcrd</span><span class="mk-fg">:</span>
+    <span class="mk-cyan">image</span><span class="mk-fg">:</span> <span class="mk-yellow">ghcr.io/jzbz/dcrd-mainnet:latest</span>
+    <span class="mk-cyan">container_name</span><span class="mk-fg">:</span> <span class="mk-yellow">dcrd</span>
+    <span class="mk-cyan">restart</span><span class="mk-fg">:</span> <span class="mk-yellow">unless-stopped</span>
+    <span class="mk-cyan">read_only</span><span class="mk-fg">:</span> <span class="mk-purple">true</span>
+    <span class="mk-cyan">stop_grace_period</span><span class="mk-fg">:</span> <span class="mk-purple">60s</span>
+    <span class="mk-comment"># Add the service name to the RPC TLS certificate for remote RPC clients.</span>
+    <span class="mk-cyan">command</span><span class="mk-fg">:</span> [<span class="mk-yellow">"--altdnsnames"</span>, <span class="mk-yellow">"dcrd"</span>]
+    <span class="mk-cyan">ports</span><span class="mk-fg">:</span>
+      - <span class="mk-yellow">"9108:9108"</span>   <span class="mk-comment"># mainnet peer-to-peer</span>
+      <span class="mk-comment"># - "9109:9109" # mainnet JSON-RPC (uncomment to expose remotely)</span>
+    <span class="mk-cyan">volumes</span><span class="mk-fg">:</span>
+      - <span class="mk-yellow">decred-data:/home/decred</span>
+
+<span class="mk-pink">volumes</span><span class="mk-fg">:</span>
+  <span class="mk-green">decred-data</span><span class="mk-fg">:</span></pre>
+                </div>
+
+                <div class="download-row">
+                    <a href="docker-compose.yaml" download="docker-compose.yaml" class="download-btn"
+                        data-i18n="download_yaml">⬇ Download docker-compose.yaml</a>
+                    <span class="then-run">
+                        <span data-i18n="then_run">Then run:</span>
+                        <span class="inline-code">docker compose up -d</span>
+                    </span>
+                </div>
+            </section>
+
+            <section class="demo-section" id="demo-section">
+                <div class="section-head">
+                    <span class="section-num" aria-hidden="true">03</span>
+                    <h2 class="section-title" data-i18n="demo_title">Demo</h2>
+                </div>
+                <p class="lead" data-i18n="demo_info">
                     See the installation process in action:
                 </p>
-                <object data="dcr-demo.svg" type="image/svg+xml" class="demo-image" id="demoSvg"
-                    aria-label="Decred Node Installation Demo">
-                    <img src="dcr-demo.svg" alt="Decred Installation Demo" class="demo-image">
-                </object>
-            </div>
+                <div class="code-card demo-card">
+                    <div class="code-chrome">
+                        <div class="chrome-dots">
+                            <span class="dot dot-pink"></span>
+                            <span class="dot dot-orange"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="chrome-label">— bash · demo</span>
+                        </div>
+                    </div>
+                    <div class="demo-clip">
+                        <object data="dcr-demo.svg" type="image/svg+xml" class="demo-image" id="demoSvg"
+                            aria-label="Decred Node Installation Demo">
+                            <img src="dcr-demo.svg" alt="Decred Installation Demo" class="demo-image">
+                        </object>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="https://decred.org" target="_blank" rel="noopener" class="footer-link">
-                        <span aria-hidden="true">🌐</span> <span data-i18n="footer_website">Official Website</span>
-                    </a>
-                    <a href="https://docs.decred.org" target="_blank" rel="noopener" class="footer-link">
-                        <span aria-hidden="true">📚</span> <span data-i18n="footer_docs">Documentation</span>
-                    </a>
-                    <a href="https://github.com/decred" target="_blank" rel="noopener" class="footer-link">
-                        <span aria-hidden="true">💻</span> <span data-i18n="footer_github">GitHub</span>
-                    </a>
-                    <a href="https://dcrdata.decred.org" target="_blank" rel="noopener" class="footer-link">
-                        <span aria-hidden="true">📊</span> <span data-i18n="footer_explorer">Block Explorer</span>
-                    </a>
-                    <a href="https://chat.decred.org" target="_blank" rel="noopener" class="footer-link">
-                        <span aria-hidden="true">💬</span> <span data-i18n="footer_community">Community</span>
-                    </a>
-                </div>
-                <p class="footer-text">
-                    <span data-i18n="footer_powered">Powered by</span> <a href="https://decred.org" target="_blank"
-                        rel="noopener">Decred</a>
-                </p>
+            <div class="footer-links">
+                <a href="https://decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span aria-hidden="true">🌐</span> <span data-i18n="footer_website">Official Website</span>
+                </a>
+                <a href="https://docs.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span aria-hidden="true">📚</span> <span data-i18n="footer_docs">Documentation</span>
+                </a>
+                <a href="https://github.com/decred" target="_blank" rel="noopener" class="footer-link">
+                    <span aria-hidden="true">💻</span> <span data-i18n="footer_github">GitHub</span>
+                </a>
+                <a href="https://dcrdata.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span aria-hidden="true">📊</span> <span data-i18n="footer_explorer">Block Explorer</span>
+                </a>
+                <a href="https://chat.decred.org" target="_blank" rel="noopener" class="footer-link">
+                    <span aria-hidden="true">💬</span> <span data-i18n="footer_community">Community</span>
+                </a>
             </div>
+            <p class="footer-text">
+                <span data-i18n="footer_powered">Powered by</span> <a href="https://decred.org" target="_blank"
+                    rel="noopener">Decred</a>
+            </p>
         </footer>
     </div>
 

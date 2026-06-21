@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'Space Grotesk'">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2ed6a1"/>
+      <stop offset="1" stop-color="#66d9ef"/>
+    </linearGradient>
+    <radialGradient id="teal" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2ed6a1" stop-opacity="0.33"/>
+      <stop offset="1" stop-color="#2ed6a1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pink" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f92672" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#f92672" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#66d9ef" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#66d9ef" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="0.14" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#f8f8f2" stop-opacity="0.07"/>
+    </linearGradient>
+    <clipPath id="card"><rect x="80" y="232" width="1040" height="246" rx="24"/></clipPath>
+    <clipPath id="logoR"><rect x="0" y="0" width="64" height="64" rx="11" ry="11"/></clipPath>
+  </defs>
+
+  <!-- Canvas -->
+  <rect width="1200" height="630" fill="#131310"/>
+
+  <!-- Drifting glow blobs -->
+  <circle cx="190" cy="120" r="360" fill="url(#teal)"/>
+  <circle cx="1080" cy="340" r="380" fill="url(#pink)"/>
+  <circle cx="620" cy="720" r="430" fill="url(#cyan)"/>
+
+  <!-- Header: logo tile -->
+  <rect x="80" y="70" width="96" height="96" rx="24" fill="#272822" fill-opacity="0.55" stroke="#f8f8f2" stroke-opacity="0.12" stroke-width="1.5"/>
+  <g transform="translate(100,90) scale(0.875)" clip-path="url(#logoR)">
+    <path d="M0 0h64v64H0z" fill="#2970ff"/>
+    <path d="M43.21 40.24 51 48h-7.65L30.5 35.2h8a6.4 6.4 0 1 0 0-12.8h-2.6L29.43 16h8.72A12.82 12.82 0 0 1 51 28.8c0 5.2-2.3 9.26-7.79 11.44" fill="#fff"/>
+    <path d="M20.79 23.76 13 16h7.66l12.85 12.8h-7.95a6.4 6.4 0 1 0 0 12.8h2.59l6.42 6.4h-8.72A12.82 12.82 0 0 1 13 35.2c0-5.2 2.3-9.26 7.79-11.44" fill="#fff"/>
+  </g>
+
+  <!-- Header: wordmark -->
+  <text x="200" y="124" font-size="48" font-weight="700" letter-spacing="-0.5" fill="url(#brand)">Decred Node</text>
+  <text x="202" y="152" font-family="'JetBrains Mono'" font-size="17" letter-spacing="5" fill="#75715e">MONEY EVOLVED</text>
+
+  <!-- Hero terminal card -->
+  <rect x="80" y="232" width="1040" height="246" rx="24" fill="#272822" fill-opacity="0.62"/>
+  <g clip-path="url(#card)">
+    <rect x="80" y="232" width="1040" height="64" fill="#000000" fill-opacity="0.22"/>
+  </g>
+  <line x1="80" y1="296" x2="1120" y2="296" stroke="#f8f8f2" stroke-opacity="0.07" stroke-width="1"/>
+  <rect x="80" y="232" width="1040" height="246" rx="24" fill="none" stroke="url(#edge)" stroke-width="1.5"/>
+
+  <!-- chrome dots -->
+  <circle cx="118" cy="264" r="9" fill="#f92672"/>
+  <circle cx="150" cy="264" r="9" fill="#fd971f"/>
+  <circle cx="182" cy="264" r="9" fill="#a6e22e"/>
+  <text x="214" y="271" font-family="'JetBrains Mono'" font-size="19" fill="#75715e">&#8212; bash &#183; Linux</text>
+
+  <!-- command -->
+  <text x="116" y="398" font-family="'JetBrains Mono'" font-size="31" font-weight="500" xml:space="preserve"><tspan fill="#a6e22e">$ curl</tspan><tspan fill="#fd971f"> -fsSL</tspan><tspan fill="#66d9ef"> https://node.dcr.pw</tspan><tspan fill="#f8f8f2"> |</tspan><tspan fill="#f92672"> sudo</tspan><tspan fill="#a6e22e"> bash</tspan><tspan fill="#2ed6a1">&#9612;</tspan></text>
+
+  <!-- supporting line -->
+  <text x="84" y="552" font-size="32" font-weight="500" fill="#9b9a90">One command. A full Decred node on Linux.</text>
+
+  <!-- url + attribution -->
+  <text x="84" y="596" font-family="'JetBrains Mono'" font-size="24" fill="#2ed6a1">node.dcr.pw</text>
+  <text x="1116" y="596" font-family="'JetBrains Mono'" font-size="20" text-anchor="end" fill="#75715e">powered by <tspan fill="#2ed6a1">Decred</tspan></text>
+</svg>

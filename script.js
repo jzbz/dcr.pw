@@ -44,7 +44,7 @@ const showNotification = (() => {
     return () => {
         clearTimeout(timeoutId);
         notification.classList.add('show');
-        timeoutId = setTimeout(() => notification.classList.remove('show'), 2000);
+        timeoutId = setTimeout(() => notification.classList.remove('show'), 1900);
     };
 })();
 
@@ -163,10 +163,6 @@ function switchTab(tabName, clickedTab) {
         tab.setAttribute('aria-selected', isActive); // Keep screen readers in sync
         tab.tabIndex = isActive ? 0 : -1;            // Roving tabindex
     });
-
-    // Show/hide demo section
-    const demoSection = document.getElementById('demo-section');
-    demoSection.style.display = tabName === 'curl' ? 'block' : 'none';
 }
 
 // Arrow-key navigation for the tablist (WAI-ARIA tabs pattern)
@@ -196,9 +192,9 @@ function initTabs() {
     });
 }
 
-// Event delegation for command box click
-document.querySelector('.command-box')?.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('copy-btn')) {
+// Click anywhere on the install card (except the copy button) to copy
+document.getElementById('installCard')?.addEventListener('click', (e) => {
+    if (!e.target.closest('.copy-btn')) {
         copyCommand();
     }
 });
