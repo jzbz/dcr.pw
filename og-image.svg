@@ -60,12 +60,8 @@
   <text x="214" y="271" font-family="'JetBrains Mono'" font-size="19" fill="#75715e">&#8212; bash &#183; Linux</text>
 
   <!-- command -->
-  <text x="116" y="398" font-family="'JetBrains Mono'" font-size="31" font-weight="500" xml:space="preserve"><tspan fill="#a6e22e">$ curl</tspan><tspan fill="#fd971f"> -fsSL</tspan><tspan fill="#66d9ef"> https://node.dcr.pw</tspan><tspan fill="#f8f8f2"> |</tspan><tspan fill="#f92672"> sudo</tspan><tspan fill="#a6e22e"> bash</tspan><tspan fill="#2ed6a1">&#9612;</tspan></text>
+  <text x="116" y="398" font-family="'JetBrains Mono'" font-size="31" font-weight="500" xml:space="preserve"><tspan fill="#a6e22e">$ curl</tspan><tspan fill="#fd971f"> -fsSL</tspan><tspan fill="#66d9ef"> https://node.dcr.pw</tspan><tspan fill="#f8f8f2"> |</tspan><tspan fill="#f92672"> sudo</tspan><tspan fill="#a6e22e"> bash</tspan></text>
 
   <!-- supporting line -->
   <text x="84" y="552" font-size="32" font-weight="500" fill="#9b9a90">One command. A full Decred node on Linux.</text>
-
-  <!-- url + attribution -->
-  <text x="84" y="596" font-family="'JetBrains Mono'" font-size="24" fill="#2ed6a1">node.dcr.pw</text>
-  <text x="1116" y="596" font-family="'JetBrains Mono'" font-size="20" text-anchor="end" fill="#75715e">powered by <tspan fill="#2ed6a1">Decred</tspan></text>
 </svg>
