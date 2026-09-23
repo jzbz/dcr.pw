@@ -9,7 +9,7 @@
     /* Monokai palette */
     --fg: #f8f8f2;
     --muted: #9b9a90;
-    --comment: #75715e;
+    --comment: #938f7a; /* Monokai's #75715e, lifted to 5.7:1 for small text */
     --pink: #f92672;
     --orange: #fd971f;
     --yellow: #e6db74;
@@ -39,6 +39,7 @@
 
     /* Layout */
     --max-width: 900px;
+    --nav-width: 1100px;
 }
 
 /* Base */
@@ -52,6 +53,10 @@
 
 html {
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+    /* Keep focused and anchored content clear of the sticky nav; script.js
+       measures the bar, whose height depends on width and label lengths */
+    scroll-padding-top: calc(var(--header-h, 64px) + 24px);
 }
 
 body {
@@ -63,10 +68,32 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    scrollbar-gutter: stable;
 }
 
-/* ---- Background glow blobs ---- */
+/* The UA's display:none for [hidden] loses to any class that sets display */
+[hidden] {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* One consistent keyboard focus ring; mouse clicks don't show it */
+:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+
+/* ---- Background glow blobs ----
+   The falloff is baked into each gradient instead of a filter: blur(), so
+   the endlessly animating layer (and every glass panel over it) doesn't
+   cost a full-screen blur per frame. */
 .bg-blobs {
     position: fixed;
     inset: 0;
@@ -78,7 +105,6 @@ body {
 .blob {
     position: absolute;
     border-radius: 50%;
-    will-change: transform;
 }
 
 .blob-teal {
@@ -86,8 +112,8 @@ body {
     left: -120px;
     width: 520px;
     height: 520px;
-    background: radial-gradient(circle, rgba(46, 214, 161, 0.22), transparent 65%);
-    filter: blur(40px);
+    background: radial-gradient(circle, rgba(46, 214, 161, 0.174), rgba(46, 214, 161, 0.141) 20%,
+        rgba(46, 214, 161, 0.081) 40%, rgba(46, 214, 161, 0.024) 59%, transparent 75%);
     animation: floatA 20s ease-in-out infinite;
 }
 
@@ -96,8 +122,8 @@ body {
     right: -160px;
     width: 560px;
     height: 560px;
-    background: radial-gradient(circle, rgba(249, 38, 114, 0.16), transparent 65%);
-    filter: blur(48px);
+    background: radial-gradient(circle, rgba(249, 38, 114, 0.126), rgba(249, 38, 114, 0.102) 20%,
+        rgba(249, 38, 114, 0.059) 40%, rgba(249, 38, 114, 0.018) 59%, transparent 75%);
     animation: floatB 24s ease-in-out infinite;
 }
 
@@ -106,8 +132,8 @@ body {
     left: 30%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(102, 217, 239, 0.14), transparent 65%);
-    filter: blur(52px);
+    background: radial-gradient(circle, rgba(102, 217, 239, 0.111), rgba(102, 217, 239, 0.090) 20%,
+        rgba(102, 217, 239, 0.052) 40%, rgba(102, 217, 239, 0.015) 59%, transparent 75%);
     animation: floatC 28s ease-in-out infinite;
 }
 
@@ -132,90 +158,246 @@ body {
     z-index: 1;
     max-width: var(--max-width);
     margin-inline: auto;
-    padding: 56px 24px 90px;
+    padding: 0 24px 90px;
+}
 
-    @media (width <=768px) {
-        padding: 36px 18px 64px;
+@media (max-width: 768px) {
+    .container {
+        padding: 0 18px 64px;
     }
 }
 
-/* ---- Header ---- */
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 64px;
-
-    @media (width <=560px) {
-        margin-bottom: 44px;
-    }
+/* ---- Site header: floating glass nav bar ---- */
+.site-header {
+    position: sticky;
+    top: 12px;
+    z-index: 50;
+    max-width: var(--nav-width);
+    margin: 12px auto 0;
+    padding-inline: 16px;
 }
 
-.brand {
+.nav {
+    position: relative;
+    isolation: isolate;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 18px;
-}
-
-.logo-tile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 18px;
-    background: var(--glass-soft);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    gap: 10px 24px;
+    padding: 9px 10px 9px 16px;
+    border-radius: 16px;
     border: var(--hairline);
-    box-shadow: var(--depth-sm), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    flex-shrink: 0;
-
-    @media (width <=560px) {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-    }
+    box-shadow: var(--depth-sm), var(--inset-hi);
 }
 
-.logo {
-    width: 34px;
-    height: 34px;
+/* The glass lives on a pseudo-element: a backdrop-filter on .nav itself
+   would make it a backdrop root, and the language menu's own blur would
+   then see nothing below the bar */
+.nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: rgba(24, 24, 20, 0.78);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--fg);
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-brand img {
+    width: 28px;
+    height: 28px;
     display: block;
+}
 
-    @media (width <=560px) {
-        width: 30px;
-        height: 30px;
+.nav-links {
+    order: 2;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 28px;
+    list-style: none;
+    font-size: 14px;
+}
+
+.nav-links a {
+    /* Brighter than --muted: bright content can scroll under the glass */
+    color: #c4c3b9;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--fg);
+}
+
+.nav-actions {
+    order: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 10px;
+    background: rgba(46, 214, 161, 0.14);
+    color: var(--teal);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.nav-cta svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.nav-cta:hover {
+    background: rgba(46, 214, 161, 0.24);
+}
+
+/* Narrow: links drop to their own row under the brand and actions */
+@media (max-width: 880px) {
+    .nav-links {
+        order: 4;
+        flex-basis: 100%;
+        justify-content: space-around;
+        gap: 6px 16px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(248, 248, 242, 0.07);
+        font-size: 13.5px;
+    }
+
+    .nav-actions {
+        margin-left: auto;
     }
 }
 
+@media (max-width: 480px) {
+    .site-header {
+        padding-inline: 10px;
+    }
+
+    .nav {
+        column-gap: 12px;
+        padding-inline: 12px 8px;
+    }
+
+    .nav-links {
+        gap: 6px 12px;
+        font-size: 13px;
+    }
+
+    .nav-cta {
+        padding: 8px;
+    }
+
+    /* The link keeps its name from aria-label */
+    .nav-cta-label {
+        display: none;
+    }
+}
+
+/* Short viewports (landscape phones, zoomed desktops): let the bar scroll away */
+@media (max-height: 500px) {
+    .site-header {
+        position: relative;
+        top: 0;
+    }
+
+    html {
+        scroll-padding-top: 0;
+    }
+}
+
+/* ---- Hero ---- */
+.hero {
+    text-align: center;
+    padding: 76px 0 60px;
+}
+
+@media (max-width: 560px) {
+    .hero {
+        padding: 52px 0 40px;
+    }
+}
+
+.hero-badge {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 9px;
+    margin: 0 auto 22px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--glass-soft);
+    border: var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* Tracked uppercase reads as gaps between CJK glyphs */
+:is(:lang(ja), :lang(ko), :lang(zh)) .hero-badge {
+    letter-spacing: 1px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2.4s ease-out infinite;
+}
+
+/* fit-content so the gradient spans the words, not the full column */
 h1 {
-    font-size: 30px;
+    width: fit-content;
+    margin-inline: auto;
+    font-size: clamp(44px, 9vw, 72px);
     font-weight: 700;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
     background: var(--brand-grad);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-
-    @media (width <=560px) {
-        font-size: 24px;
-    }
 }
 
-.eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--comment);
-    margin-top: 5px;
+.hero-lead {
+    max-width: 560px;
+    margin: 20px auto 0;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.6;
+    text-wrap: balance;
+    word-break: auto-phrase;
+}
 
-    @media (width <=560px) {
-        letter-spacing: 2px;
-        font-size: 11px;
+@media (max-width: 560px) {
+    .hero-lead {
+        font-size: 16px;
     }
 }
 
@@ -228,19 +410,16 @@ h1 {
 .lang-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 12px;
-    background: var(--glass-soft);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: rgba(248, 248, 242, 0.04);
     border: var(--hairline);
     color: var(--fg);
     font-family: var(--font-mono);
     font-size: 13px;
     cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    transition: all 0.22s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .lang-btn:hover {
@@ -258,8 +437,11 @@ h1 {
     top: calc(100% + 10px);
     right: 0;
     min-width: 150px;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
     border-radius: 14px;
-    overflow: hidden;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
     background: var(--glass);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
@@ -279,23 +461,41 @@ h1 {
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
     padding: 9px 12px;
+    border: 0;
     border-radius: 9px;
+    background: none;
     color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 13px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    text-align: start;
+    white-space: nowrap;
     cursor: pointer;
-    transition: all 0.18s ease;
+    transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-.lang-option:hover {
+.lang-option:hover,
+.lang-option:focus-visible {
     background: rgba(102, 217, 239, 0.1);
     color: var(--cyan);
 }
 
-.lang-option.active {
+.lang-option[aria-checked="true"] {
     color: var(--teal);
     background: rgba(46, 214, 161, 0.1);
+}
+
+/* A drawn tick, so the current language isn't marked by colour alone
+   (no text content, so it stays out of the accessible name) */
+.lang-option[aria-checked="true"]::after {
+    content: "";
+    width: 9px;
+    height: 5px;
+    margin-inline-start: auto;
+    border: solid currentColor;
+    border-width: 0 0 2px 2px;
+    transform: translateY(-2px) rotate(-45deg);
 }
 
 /* ---- Tabs ---- */
@@ -303,8 +503,10 @@ h1 {
     display: flex;
     gap: 12px;
     margin-bottom: 32px;
+}
 
-    @media (width <=480px) {
+@media (max-width: 480px) {
+    .tabs {
         gap: 8px;
     }
 }
@@ -319,17 +521,20 @@ h1 {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.22s ease;
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    transition: color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
     color: var(--muted);
     background: var(--glass-soft);
     border: var(--hairline);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
 
-    @media (width <=480px) {
+@media (max-width: 480px) {
+    .tab {
         flex: 1;
         justify-content: center;
+        /* min-width + hyphens let long labels (de "Schnellinstallation") wrap at 320px */
+        min-width: 0;
+        hyphens: auto;
         padding: 11px 14px;
         font-size: 14px;
     }
@@ -342,7 +547,8 @@ h1 {
 
 .tab.active {
     color: #0c1f1a;
-    background: var(--brand-grad);
+    /* border-box: otherwise the gradient tiles into the transparent border as 1px seams */
+    background: var(--brand-grad) border-box;
     border: 1px solid transparent;
     box-shadow: 0 8px 26px rgba(46, 214, 161, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -381,8 +587,10 @@ h1 {
     font-weight: 600;
     letter-spacing: -0.3px;
     color: var(--fg);
+}
 
-    @media (width <=560px) {
+@media (max-width: 560px) {
+    .section-title {
         font-size: 19px;
     }
 }
@@ -393,8 +601,10 @@ h1 {
     font-size: 15px;
     line-height: 1.6;
     max-width: 620px;
+}
 
-    @media (width <=560px) {
+@media (max-width: 560px) {
+    .lead {
         font-size: 14px;
     }
 }
@@ -425,13 +635,14 @@ h1 {
     font-size: 0.92em;
 }
 
-/* ---- Code card (glass terminal/editor) ---- */
+/* ---- Code card (glass terminal/editor) ----
+   Panels that only ever sit over the soft glow skip backdrop-filter: it
+   was visually identical there, and each one re-blurred every frame. Only
+   overlays above real content (nav, language menu, toast) keep it. */
 .code-card {
     border-radius: 18px;
     overflow: hidden;
     background: var(--glass);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
     border: var(--hairline);
     box-shadow: var(--depth), var(--inset-hi);
 }
@@ -491,14 +702,22 @@ pre.code-body {
     font-size: 13.5px;
     line-height: 1.75;
     white-space: pre;
+}
 
-    @media (width <=480px) {
+@media (max-width: 480px) {
+    pre.code-body {
         font-size: 12px;
     }
 }
 
-.terminal {
-    @media (width <=480px) {
+/* The card clips overflow, so draw the ring inside the scroller */
+pre.code-body:focus-visible {
+    outline-offset: -3px;
+    border-radius: 0 0 17px 17px;
+}
+
+@media (max-width: 480px) {
+    .terminal {
         font-size: 13px;
     }
 }
@@ -532,8 +751,9 @@ pre.code-body {
 .mk-purple { color: var(--purple); }
 .mk-comment { color: var(--comment); }
 
-/* ---- Copy button ---- */
-.copy-btn {
+/* ---- Chrome-bar buttons (copy, demo pause/play) ---- */
+.copy-btn,
+.demo-toggle {
     display: flex;
     align-items: center;
     gap: 7px;
@@ -546,16 +766,18 @@ pre.code-body {
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.22s ease;
+    transition: background-color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
     flex-shrink: 0;
 }
 
-.copy-btn:hover {
+.copy-btn:hover,
+.demo-toggle:hover {
     background: rgba(46, 214, 161, 0.2);
     border-color: rgba(46, 214, 161, 0.55);
 }
 
-.copy-btn:active {
+.copy-btn:active,
+.demo-toggle:active {
     transform: translateY(1px);
 }
 
@@ -586,7 +808,7 @@ pre.code-body {
     font-weight: 700;
     text-decoration: none;
     box-shadow: 0 8px 24px rgba(46, 214, 161, 0.25);
-    transition: all 0.22s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .download-btn:hover {
@@ -621,10 +843,96 @@ pre.code-body {
     line-height: 0;
 }
 
+/* aspect-ratio reserves the box before the SVG loads, so nothing below jumps */
 .demo-image {
     width: 100%;
+    height: auto;
+    aspect-ratio: 847 / 571;
     display: block;
     margin-top: -5.31%;
+}
+
+/* ---- More tools ---- */
+.tools-section {
+    margin-top: 56px;
+}
+
+.section-num-muted {
+    color: var(--comment);
+}
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 14px;
+    margin-top: 18px;
+    list-style: none;
+}
+
+.tool-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    height: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    background: var(--glass-soft);
+    border: 1px solid rgba(248, 248, 242, 0.09);
+    box-shadow: var(--inset-hi);
+    color: var(--fg);
+    text-decoration: none;
+    transition: border-color 0.22s ease, transform 0.22s ease;
+}
+
+.tool-card:hover {
+    border-color: rgba(46, 214, 161, 0.4);
+    transform: translateY(-2px);
+}
+
+.tool-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(46, 214, 161, 0.12);
+    color: var(--teal);
+}
+
+.tool-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.tool-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.tool-name {
+    font-size: 15.5px;
+    font-weight: 600;
+}
+
+.tool-card:hover .tool-name {
+    color: var(--teal);
+}
+
+.tool-host {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--cyan);
+}
+
+.tool-desc {
+    margin-top: 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
 }
 
 /* ---- Footer ---- */
@@ -648,15 +956,15 @@ pre.code-body {
     padding: 11px 16px;
     border-radius: 12px;
     background: var(--glass-soft);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(248, 248, 242, 0.09);
     color: var(--fg);
     font-size: 13.5px;
     text-decoration: none;
-    transition: all 0.22s ease;
+    transition: color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
 
-    @media (width <=480px) {
+@media (max-width: 480px) {
+    .footer-link {
         flex: 1 1 calc(50% - 12px);
         justify-content: center;
     }
@@ -704,13 +1012,17 @@ pre.code-body {
     font-size: 14px;
     color: var(--fg);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* visibility flips after the fade-out, keeping the idle toast out of the reading order */
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0s 0.3s;
 }
 
 .toast.show {
     opacity: 1;
+    visibility: visible;
     transform: translateX(-50%) translateY(0) scale(1);
+    transition-delay: 0s;
 }
 
 .toast-check {
@@ -738,6 +1050,11 @@ pre.code-body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(46, 214, 161, 0.55); }
+    70%, 100% { box-shadow: 0 0 0 7px rgba(46, 214, 161, 0); }
+}
+
 @keyframes pop {
     from { opacity: 0; transform: translateY(-6px) scale(0.97); }
     to { opacity: 1; transform: translateY(0) scale(1); }
@@ -756,10 +1073,6 @@ pre.code-body {
 .no-js .tab-content {
     display: block;
     margin-bottom: 30px;
-}
-
-.no-js .demo-section {
-    display: block;
 }
 
 /* ---- Reduced motion ---- */

@@ -235,7 +235,7 @@ function update_timer() {
     var current_time = (animation.currentTime / 1000) % animation_duration
     timer.textContent =  timer_from_seconds(current_time) + "/" + timer_from_seconds(animation_duration)
 }
-setInterval(update_timer, "100ms")
+setInterval(update_timer, 100)
 
 
 
@@ -298,6 +298,6 @@ function update_slider_button() {
     slider_1.setAttribute('x', parseInt(current_position)+'px')
 }
 
-setInterval(update_slider_button, "100ms")
+setInterval(update_slider_button, 100)
 </script>
 </svg>
