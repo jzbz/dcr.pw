@@ -3,6 +3,24 @@
    Frosted translucent panels over drifting colored glow.
    ============================================================ */
 
+/* Self-hosted variable fonts, latin subset (SIL OFL 1.1, see assets/fonts/).
+   Other scripts (CJK, Hangul) fall back to system fonts as before. */
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('assets/fonts/space-grotesk-latin.woff2') format('woff2');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('assets/fonts/jetbrains-mono-latin.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     color-scheme: dark;
 

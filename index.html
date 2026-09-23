@@ -55,11 +55,9 @@
     }
     </script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <!-- Fonts: self-hosted (declared in style.css); both are used above the fold -->
+    <link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
@@ -363,7 +361,7 @@
                 <a href="https://github.com/decred" target="_blank" rel="noopener" class="footer-link">
                     <span aria-hidden="true">💻</span> <span data-i18n="footer_github">GitHub</span>
                 </a>
-                <a href="https://dcrdata.decred.org" target="_blank" rel="noopener" class="footer-link">
+                <a href="https://data.dcr.pw/" target="_blank" rel="noopener" class="footer-link">
                     <span aria-hidden="true">📊</span> <span data-i18n="footer_explorer">Block Explorer</span>
                 </a>
                 <a href="https://chat.decred.org" target="_blank" rel="noopener" class="footer-link">
