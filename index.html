@@ -90,6 +90,7 @@
                 <li><a href="https://map.dcr.pw/" data-i18n="nav_map">Map</a></li>
                 <li><a href="https://data.dcr.pw/" data-i18n="nav_explorer">Explorer</a></li>
                 <li><a href="https://paper.dcr.pw/" data-i18n="nav_paper">Paper Wallet</a></li>
+                <li><a href="https://docs.dcr.pw/" data-i18n="nav_docs">Docs</a></li>
                 <li><a href="https://decred.zip/" data-i18n="nav_archive">Archive</a></li>
             </ul>
             <div class="nav-actions">
@@ -339,31 +340,50 @@
                 </ul>
             </section>
         </main>
-
-        <footer class="footer">
-            <div class="footer-links">
-                <a href="https://decred.org" target="_blank" rel="noopener" class="footer-link">
-                    <span aria-hidden="true">🌐</span> <span data-i18n="footer_website">Official Website</span>
-                </a>
-                <a href="https://docs.decred.org" target="_blank" rel="noopener" class="footer-link">
-                    <span aria-hidden="true">📚</span> <span data-i18n="footer_docs">Documentation</span>
-                </a>
-                <a href="https://github.com/decred" target="_blank" rel="noopener" class="footer-link">
-                    <span aria-hidden="true">💻</span> <span data-i18n="footer_github">GitHub</span>
-                </a>
-                <a href="https://data.dcr.pw/" target="_blank" rel="noopener" class="footer-link">
-                    <span aria-hidden="true">📊</span> <span data-i18n="footer_explorer">Block Explorer</span>
-                </a>
-                <a href="https://chat.decred.org" target="_blank" rel="noopener" class="footer-link">
-                    <span aria-hidden="true">💬</span> <span data-i18n="footer_community">Community</span>
-                </a>
-            </div>
-            <p class="footer-text">
-                <span data-i18n="footer_powered">Powered by</span> <a href="https://decred.org" target="_blank"
-                    rel="noopener">Decred</a>
-            </p>
-        </footer>
     </div>
+
+    <!-- Colophon, after docs.dcr.pw: brand on the left, links on the right -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img class="footer-logo" src="assets/images/dcr.svg" alt="" width="24" height="24" decoding="async">
+                <span class="footer-name" data-i18n="heading">Decred Node</span>
+                <p data-i18n="hero_lead">Run a full Decred node on Linux with a single command, or with Docker Compose.</p>
+            </div>
+            <nav class="footer-links" aria-label="Decred links" data-i18n-label="footer_label">
+                <a href="https://decred.org" target="_blank" rel="noopener">
+                    <span data-i18n="footer_website">Official Website</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+                <a href="https://docs.dcr.pw/" target="_blank" rel="noopener">
+                    <span data-i18n="footer_docs">Documentation</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+                <a href="https://github.com/decred" target="_blank" rel="noopener">
+                    <span data-i18n="footer_github">GitHub</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+                <a href="https://data.dcr.pw/" target="_blank" rel="noopener">
+                    <span data-i18n="footer_explorer">Block Explorer</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+                <a href="https://chat.decred.org" target="_blank" rel="noopener">
+                    <span data-i18n="footer_community">Community</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+                <a href="https://jz.bz/" target="_blank" rel="noopener">
+                    <span>jz</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+            </nav>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="assets/js/translations.js" defer></script>

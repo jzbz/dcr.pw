@@ -18,6 +18,7 @@ const translations = {
         nav_map: "Map",
         nav_explorer: "Explorer",
         nav_paper: "Paper Wallet",
+        nav_docs: "Docs",
         nav_archive: "Archive",
         tools_title: "More Decred tools",
         tool_map: "Network Map",
@@ -47,7 +48,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "Block Explorer",
         footer_community: "Community",
-        footer_powered: "Powered by",
+        footer_label: "Decred links",
         copied: "Copied to clipboard!"
     },
     fr: {
@@ -69,6 +70,7 @@ const translations = {
         nav_map: "Carte",
         nav_explorer: "Explorateur",
         nav_paper: "Portefeuille papier",
+        nav_docs: "Docs",
         nav_archive: "Archive",
         tools_title: "Plus d'outils Decred",
         tool_map: "Carte du réseau",
@@ -98,7 +100,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "Explorateur de blocs",
         footer_community: "Communauté",
-        footer_powered: "Propulsé par",
+        footer_label: "Liens Decred",
         copied: "Copié dans le presse-papiers\u00a0!"
     },
     es: {
@@ -120,6 +122,7 @@ const translations = {
         nav_map: "Mapa",
         nav_explorer: "Explorador",
         nav_paper: "Billetera de papel",
+        nav_docs: "Docs",
         nav_archive: "Archivo",
         tools_title: "Más herramientas de Decred",
         tool_map: "Mapa de la red",
@@ -149,7 +152,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "Explorador de bloques",
         footer_community: "Comunidad",
-        footer_powered: "Impulsado por",
+        footer_label: "Enlaces de Decred",
         copied: "¡Copiado al portapapeles!"
     },
     de: {
@@ -171,6 +174,7 @@ const translations = {
         nav_map: "Karte",
         nav_explorer: "Explorer",
         nav_paper: "Papier-Wallet",
+        nav_docs: "Doku",
         nav_archive: "Archiv",
         tools_title: "Weitere Decred-Tools",
         tool_map: "Netzwerkkarte",
@@ -200,7 +204,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "Block-Explorer",
         footer_community: "Gemeinschaft",
-        footer_powered: "Basiert auf",
+        footer_label: "Decred-Links",
         copied: "In die Zwischenablage kopiert!"
     },
     ja: {
@@ -222,6 +226,7 @@ const translations = {
         nav_map: "マップ",
         nav_explorer: "エクスプローラー",
         nav_paper: "ペーパーウォレット",
+        nav_docs: "ドキュメント",
         nav_archive: "アーカイブ",
         tools_title: "その他のDecredツール",
         tool_map: "ネットワークマップ",
@@ -251,7 +256,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "ブロックエクスプローラー",
         footer_community: "コミュニティ",
-        footer_powered: "Powered by",
+        footer_label: "Decredのリンク",
         copied: "コピーしました！"
     },
     ko: {
@@ -273,6 +278,7 @@ const translations = {
         nav_map: "지도",
         nav_explorer: "탐색기",
         nav_paper: "종이 지갑",
+        nav_docs: "문서",
         nav_archive: "아카이브",
         tools_title: "더 많은 Decred 도구",
         tool_map: "네트워크 지도",
@@ -302,7 +308,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "블록 탐색기",
         footer_community: "커뮤니티",
-        footer_powered: "Powered by",
+        footer_label: "Decred 링크",
         copied: "클립보드에 복사되었습니다!"
     },
     zh: {
@@ -324,6 +330,7 @@ const translations = {
         nav_map: "地图",
         nav_explorer: "区块浏览器",
         nav_paper: "纸钱包",
+        nav_docs: "文档",
         nav_archive: "资源库",
         tools_title: "更多 Decred 工具",
         tool_map: "网络地图",
@@ -353,7 +360,7 @@ const translations = {
         footer_github: "GitHub",
         footer_explorer: "区块浏览器",
         footer_community: "社区",
-        footer_powered: "基于",
+        footer_label: "Decred 链接",
         copied: "已复制到剪贴板！"
     }
 };

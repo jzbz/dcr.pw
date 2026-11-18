@@ -929,60 +929,91 @@ pre.code-body:focus-visible {
     color: var(--muted);
 }
 
-/* ---- Footer ---- */
+/* ---- Footer ----
+   A colophon after docs.dcr.pw: a full-width strip at the foot of the
+   page, the logo, name and a one-line description on the left and plain
+   text links on the right. The inner column matches the nav bar's width
+   and inset, so the two logos line up. */
 .footer {
-    margin-top: 72px;
-    padding-top: 36px;
+    position: relative;
+    z-index: 1;
+    padding: 18px 0;
     border-top: 1px solid rgba(248, 248, 242, 0.08);
+    background: rgba(248, 248, 242, 0.022);
+}
+
+.footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 32px;
+    max-width: var(--nav-width);
+    margin-inline: auto;
+    padding: 0 30px;
+}
+
+/* The nav bar tightens its padding here too */
+@media (max-width: 480px) {
+    .footer-inner {
+        padding: 0 21px;
+    }
+}
+
+/* Six links leave less room than docs.dcr.pw's four, so the description
+   wraps to keep them alongside until the bar gets narrow */
+.footer-brand {
+    flex: 1 1 320px;
+}
+
+.footer-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.footer-name {
+    margin-left: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    vertical-align: middle;
+    color: var(--fg);
+}
+
+.footer-brand p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
 }
 
 .footer-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 12px 24px;
+    margin-left: auto;
+    font-size: 13px;
 }
 
-.footer-link {
-    display: flex;
+.footer-links a {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 11px 16px;
-    border-radius: 12px;
-    background: var(--glass-soft);
-    border: 1px solid rgba(248, 248, 242, 0.09);
+    gap: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
     color: var(--fg);
-    font-size: 13.5px;
-    text-decoration: none;
-    transition: color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
-}
-
-@media (max-width: 480px) {
-    .footer-link {
-        flex: 1 1 calc(50% - 12px);
-        justify-content: center;
-    }
-}
-
-.footer-link:hover {
-    border-color: rgba(46, 214, 161, 0.4);
-    color: var(--teal);
-    transform: translateY(-2px);
-}
-
-.footer-text {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    color: var(--comment);
-}
-
-.footer-text a {
-    color: var(--teal);
-    text-decoration: none;
-}
-
-.footer-text a:hover {
     text-decoration: underline;
+}
+
+.footer-links svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
 }
 
 /* ---- Toast ---- */
